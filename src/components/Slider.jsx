@@ -14,7 +14,7 @@ import { Navigation, Pagination, Mousewheel, Keyboard, Autoplay } from 'swiper/m
 
 const Slider = () => {
     return (
-        <div className=''>
+        <div className='my-16'>
             <Swiper
                 cssMode={true}
                 navigation={true}
