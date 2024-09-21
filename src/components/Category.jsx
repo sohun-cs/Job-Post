@@ -1,14 +1,21 @@
 
-import { useLoaderData } from 'react-router-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import CategoryCard from './CategoryCard';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 export const Category = () => {
 
-    const loadedJobs = useLoaderData();
+    const [jobs, setJobs] = useState([]);
 
-    console.log("Jobs: ", loadedJobs);
+    useEffect(() => {
+        const getData = async () => {
+            const { data } = await axios(`${import.meta.env.VITE_APP_URL}/jobs`);
+            setJobs(data);
+        }
+        getData();
+    });
 
     return (
         <div className='my-24'>
@@ -26,7 +33,7 @@ export const Category = () => {
 
                         <div className='grid grid-cols-3 gap-8 justify-items-center'>
                             {
-                                loadedJobs.filter(j => j.category == "Web Development").map(job =>
+                                jobs.filter(j => j.category == "Web Development").map(job =>
                                     <CategoryCard
                                         key={job.id}
                                         job={job}
@@ -39,7 +46,7 @@ export const Category = () => {
 
                         <div className='grid grid-cols-3 gap-8 justify-items-center'>
                             {
-                                loadedJobs.filter(j => j.category == "App Development").map(job =>
+                                jobs.filter(j => j.category == "App Development").map(job =>
                                     <CategoryCard
                                         key={job.id}
                                         job={job}
@@ -52,7 +59,7 @@ export const Category = () => {
 
                         <div className='grid grid-cols-3 gap-8 justify-items-center'>
                             {
-                                loadedJobs.filter(j => j.category == "Machine Learning").map(job =>
+                                jobs.filter(j => j.category == "Machine Learning").map(job =>
                                     <CategoryCard
                                         key={job.id}
                                         job={job}
