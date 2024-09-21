@@ -1,30 +1,68 @@
 
+import { useLoaderData } from 'react-router-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
+import CategoryCard from './CategoryCard';
 
 export const Category = () => {
+
+    const loadedJobs = useLoaderData();
+
+    console.log("Jobs: ", loadedJobs);
+
     return (
         <div className='my-24'>
             <Tabs>
-                <TabList className='text-center'>
-                    <Tab>MERN-Stack</Tab>
-                    <Tab>App Development</Tab>
-                    <Tab>Web Development</Tab>
-                </TabList>
+                <div className='flex items-center justify-center'>
+                    <TabList>
+                        <Tab>App Development</Tab>
+                        <Tab>Web Development</Tab>
+                        <Tab>Machine Learning</Tab>
+                    </TabList>
+                </div>
 
-                <div className='my-12'>
+                <div>
                     <TabPanel>
-                        <h2>Any content 1</h2>
+
+                        <div className='grid grid-cols-3 gap-8 justify-items-center'>
+                            {
+                                loadedJobs.filter(j => j.category == "Web Development").map(job =>
+                                    <CategoryCard
+                                        key={job.id}
+                                        job={job}
+                                    ></CategoryCard>)
+                            }
+                        </div>
+
                     </TabPanel>
                     <TabPanel>
-                        <h2>Any content 2</h2>
+
+                        <div className='grid grid-cols-3 gap-8 justify-items-center'>
+                            {
+                                loadedJobs.filter(j => j.category == "App Development").map(job =>
+                                    <CategoryCard
+                                        key={job.id}
+                                        job={job}
+                                    ></CategoryCard>)
+                            }
+                        </div>
+
                     </TabPanel>
                     <TabPanel>
-                        <h2>Any content 3</h2>
+
+                        <div className='grid grid-cols-3 gap-8 justify-items-center'>
+                            {
+                                loadedJobs.filter(j => j.category == "Machine Learning").map(job =>
+                                    <CategoryCard
+                                        key={job.id}
+                                        job={job}
+                                    ></CategoryCard>)
+                            }
+                        </div>
+
                     </TabPanel>
                 </div>
             </Tabs>
-
         </div>
     )
 }
