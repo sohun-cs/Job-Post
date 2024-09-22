@@ -2,23 +2,32 @@ import { Link } from "react-router-dom";
 
 const CategoryCard = ({ job }) => {
 
-    const { _id, jobTitle, deadline, description, category, minPrice, maxPrice } = job;
+    const { _id, job_title, deadline, description, category, min_price, max_price } = job;
 
     return (
         <Link to={`/job/${_id}`}>
 
-            <div className="card bg-base-100 w-96 shadow-xl">
-                <div className="card-body">
-                    <h2 className="card-title">
-                        {jobTitle}
-                    </h2>
-                    <p>{category}</p>
-                    <p>{description}</p>
-                    <div className="card-actions justify-end">
-                        <div className="badge badge-outline">{minPrice}</div>
-                        <div className="badge badge-outline">{maxPrice}</div>
-                    </div>
-                    <div className="badge badge-outline">{deadline}</div>
+            <div className='w-full max-w-sm px-4 py-3 bg-white rounded-md shadow-md hover:scale-[1.05] transition-all'>
+                <div className='flex items-center justify-between'>
+                    <span className='text-xs font-light text-gray-800 '>
+                        Deadline: {deadline}
+                    </span>
+                    <span className='px-3 py-1 text-[8px] text-blue-800 uppercase bg-blue-200 rounded-full '>
+                        {category}
+                    </span>
+                </div>
+
+                <div>
+                    <h1 className='mt-2 text-lg font-semibold text-gray-800 '>
+                        {job_title}
+                    </h1>
+
+                    <p className='mt-2 text-sm text-gray-600 '>
+                        {`${description.substring(0, 70)}...`};
+                    </p>
+                    <p className='mt-2 text-sm font-bold text-gray-600 '>
+                        Range: ${min_price} - ${max_price}
+                    </p>
                 </div>
             </div>
 

@@ -9,21 +9,25 @@ import toast from "react-hot-toast";
 
 const JobDetails = () => {
 
+    if (user?.email === buyer?.email) return toast.error('Action not permitted');
+
     const [startDate, setStartDate] = useState(new Date());
     const { user } = useContext(AuthContext);
     const job = useLoaderData();
 
-    const { _id, jobTitle, deadline, description, category, minPrice, maxPrice, buyer } = job || {};
+    const { _id, job_title, deadline, description, category, min_price, max_price, buyer } = job || {};
+
+    console.log("jobs:-- ", job);
+    console.log("User:-- ", user);
 
     const handleFormSubmission = async e => {
 
-        if (user?.email === buyer_email) return toast.error('Action not permitted');
 
         e.preventDefault();
         const form = e.target;
         const jobId = _id;
         const price = parseFloat(form.price.value);
-        if (price < parseFloat(minPrice)) return toast.error('Offer more or at least equal to minimum price')
+        if (price < parseFloat(min_price)) return toast.error('Offer more or at least equal to minimum price')
         const deadline = startDate;
         const email = user?.email;
         const comment = form.comment.value;
@@ -35,7 +39,7 @@ const JobDetails = () => {
             price,
             deadline,
             comment,
-            jobTitle,
+            job_title,
             category,
             email,
             buyer_email: buyer?.email,
@@ -46,7 +50,7 @@ const JobDetails = () => {
         console.log(bidData);
 
         try {
-            const { data } = await axios.post(`${import.meta.env.VITE_APP_URL}/bid`, bidData);
+            const { data } = await axios.post(`${import.meta.env.VITE_APP_URL}/bids`, bidData);
             console.log(data);
         } catch (error) {
             console.error(error);
@@ -70,7 +74,7 @@ const JobDetails = () => {
 
                     <div>
                         <h1 className='mt-2 text-3xl font-semibold text-gray-800 '>
-                            {jobTitle}
+                            {job_title}
                         </h1>
 
                         <p className='mt-2 text-lg text-gray-600 '>
@@ -91,7 +95,7 @@ const JobDetails = () => {
                             </div>
                         </div>
                         <p className='mt-6 text-lg font-bold text-gray-600 '>
-                            Range: ${minPrice} - ${maxPrice}
+                            Range: ${min_price} - ${max_price}
                         </p>
                     </div>
                 </div>
@@ -124,7 +128,7 @@ const JobDetails = () => {
                                     type='email'
                                     name='email'
                                     disabled
-                                    defaultValue={buyer?.email}
+                                    defaultValue={user?.email}
                                     className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md   focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40  focus:outline-none focus:ring'
                                 />
                             </div>

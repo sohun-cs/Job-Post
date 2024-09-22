@@ -22,13 +22,13 @@ export const Category = () => {
             <Tabs>
                 <div className='flex items-center justify-center'>
                     <TabList>
-                        <Tab>App Development</Tab>
                         <Tab>Web Development</Tab>
+                        <Tab>App Development</Tab>
                         <Tab>Machine Learning</Tab>
                     </TabList>
                 </div>
 
-                <div>
+                <div className='my-12'>
                     <TabPanel>
 
                         <div className='grid grid-cols-3 gap-8 justify-items-center'>
