@@ -1,7 +1,7 @@
 
 const AllPages = () => {
     return (
-        <div className=" min-h-[calc(100vh-142px)]">
+        <div className=" ">
            <h1>This is All Pages</h1> 
         </div>
     );

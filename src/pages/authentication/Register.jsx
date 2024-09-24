@@ -5,11 +5,11 @@ import toast from "react-hot-toast";
 
 const Register = () => {
 
-    const navigate = useNavigate()
-    const location = useLocation()
-    const from = location.state || '/'
-
     const {setUser, createUser, googleSignIn, updateUser } = useContext(AuthContext);
+
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state || '/';
 
     const handleSignUp = async e => {
         e.preventDefault();
@@ -54,7 +54,7 @@ const Register = () => {
     }
 
     return (
-        <div className='flex justify-center items-center min-h-[calc(100vh-136px)]'>
+        <div className='flex justify-center items-center'>
             <div className='flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg  lg:max-w-4xl '>
                 <div className='w-full px-6 py-8 md:px-8 lg:w-1/2'>
                     <div className='flex justify-center mx-auto'>

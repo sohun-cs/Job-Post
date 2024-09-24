@@ -7,7 +7,7 @@ const Root = () => {
         <div className="font-lato">
             <Navbar></Navbar>
 
-            <div className="container mx-auto ">
+            <div className="container mx-auto min-h-[calc(100vh-142px)]">
                 <Outlet></Outlet>
             </div>
 

@@ -1,16 +1,22 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../provider/AuthProvider';
 import toast from 'react-hot-toast';
 
 const Login = () => {
 
-    const navigate = useNavigate();
-    const location = useLocation();
 
     const { user, loading, signIn, googleSignIn } = useContext(AuthContext);
 
+    const navigate = useNavigate();
+    const location = useLocation();
     const from = location.state || '/';
+
+    useEffect(() => {
+        if (user) {
+            navigate('/');
+        }
+    }, [navigate, user]);
 
     const handleSignIn = async e => {
 
@@ -28,8 +34,6 @@ const Login = () => {
 
             navigate(from, { replace: true });
             toast.success("Signup successfully!");
-
-
 
         } catch (error) {
             console.error(error);
@@ -51,11 +55,13 @@ const Login = () => {
             toast.error(error?.message);
         }
 
-    }
+    };
+
+    if (user || loading) return;
 
 
     return (
-        <div className='flex justify-center items-center min-h-[calc(100vh-136px)]'>
+        <div className='flex justify-center items-center'>
             <div className='flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg  lg:max-w-4xl '>
                 <div
                     className='hidden bg-cover bg-center lg:block lg:w-1/2'
