@@ -56,12 +56,12 @@ const router = createBrowserRouter([
             },
             {
                 path: "/job/:id",
-                element: <JobDetails></JobDetails>,
+                element: <PrivateRoutes><JobDetails></JobDetails></PrivateRoutes>,
                 loader: ({ params }) => fetch(`${import.meta.env.VITE_APP_URL}/job/${params.id}`)
             },
             {
                 path: "/update/:id",
-                element: <UpdateJob></UpdateJob>,
+                element: <PrivateRoutes><UpdateJob></UpdateJob></PrivateRoutes>,
                 loader: ({ params }) => fetch(`${import.meta.env.VITE_APP_URL}/job/${params.id}`)
             }
 

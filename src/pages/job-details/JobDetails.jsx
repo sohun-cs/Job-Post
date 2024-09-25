@@ -53,6 +53,7 @@ const JobDetails = () => {
 
         try {
             const { data } = await axios.post(`${import.meta.env.VITE_APP_URL}/bids`, bidData);
+            toast.success('Bid Request Successful')
             console.log(data);
         } catch (error) {
             console.error(error);
