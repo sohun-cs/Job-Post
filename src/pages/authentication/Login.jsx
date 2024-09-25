@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../provider/AuthProvider';
 import toast from 'react-hot-toast';
+import axios from 'axios';
 
 const Login = () => {
 
@@ -47,6 +48,11 @@ const Login = () => {
 
         try {
             const result = await googleSignIn();
+            console.log(result.user);
+            const { data } = await axios.post(`${import.meta.env.VITE_APP_URL}/jwt`, {
+                email: result?.user?.email
+            });
+            console.log(data);
             toast.success("Signup successfully!");
             navigate(from, { replace: true });
 
