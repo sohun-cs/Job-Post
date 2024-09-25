@@ -15,7 +15,17 @@ const MyBids = () => {
     const getData = async () => {
         const { data } = await axios(`${import.meta.env.VITE_APP_URL}/my-bids/${user.email}`);
         setBids(data);
+    };
+
+
+    // handleStatus
+    const handleStatus = async (id, status) => {
+        const { data } = await axios.patch(`${import.meta.env.VITE_APP_URL}/bid/${id}`, { status });
+
+        console.log(data);
+        getData();
     }
+
 
 
     return (
