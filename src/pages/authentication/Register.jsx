@@ -2,6 +2,7 @@ import { useContext, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../provider/AuthProvider";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 const Register = () => {
 
@@ -32,7 +33,15 @@ const Register = () => {
             const result = await createUser(email, password);
             await updateUser(name, photo, email);
 
+            // Optimistic UI Update
             setUser({ ...result?.user, photoURL: photo, displayName: name, email: email });
+
+            console.log(result.user);
+            const { data } = await axios.post(`${import.meta.env.VITE_APP_URL}/jwt`,
+                { email: result?.user?.email },
+                { withCredentials: true }); // without this line cookie will not save in browser
+
+            console.log(data);
 
             navigate(from, { replace: true });
             toast.success("Signup successfully!");
@@ -49,6 +58,12 @@ const Register = () => {
         try {
 
             const result = await googleSignIn();
+            console.log(result.user);
+            const { data } = await axios.post(`${import.meta.env.VITE_APP_URL}/jwt`,
+                { email: result?.user?.email },
+                { withCredentials: true }); // without this line cookie will not save in browser
+
+            console.log(data);
             toast.success("Signup successfully!");
             navigate(from, { replace: true });
 

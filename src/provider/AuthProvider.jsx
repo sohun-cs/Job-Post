@@ -3,6 +3,7 @@ import { createContext } from "react";
 import auth from "../firebase/firebase.config";
 import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
 import { useEffect } from "react";
+import axios from "axios";
 
 
 export const AuthContext = createContext(null);
@@ -28,10 +29,14 @@ const AuthProvider = ({ children }) => {
         return signInWithPopup(auth, googleProvider);
     };
 
-    const logOut = () => {
-        setLoading(true);
-        return signOut(auth);
-    };
+    const logOut = async () => {
+        setLoading(true)
+        const { data } = await axios(`${import.meta.env.VITE_APP_URL}/logout`, {
+            withCredentials: true,
+        })
+        console.log(data)
+        return signOut(auth)
+    }
 
     const updateUser = (name, photo, email) => {
         return updateProfile(auth.currentUser, {
