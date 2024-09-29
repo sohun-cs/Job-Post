@@ -11,7 +11,7 @@ const Navbar = () => {
             <div className='container mx-auto'>
                 <div className='flex justify-between items-center py-3'>
                     <div>
-                        <h1 className='text-3xl text-black font-extrabold'>JobPost</h1>
+                        <h1 className='text-3xl text-black font-extrabold'><Link to='/'>JobPost</Link></h1>
                     </div>
                     <div>
                         <ul className='flex items-center gap-6'>

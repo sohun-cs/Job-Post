@@ -5,14 +5,18 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import toast from "react-hot-toast";
+import useAuth from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 
 const JobDetails = () => {
 
 
     const [startDate, setStartDate] = useState(new Date());
-    const { user } = useContext(AuthContext);
+    const { user } = useAuth();
+    const axiosSecure = useAxiosSecure();
     const job = useLoaderData();
+    
 
     const { _id, job_title, deadline, description, category, min_price, max_price, buyer } = job || {};
 
@@ -52,11 +56,13 @@ const JobDetails = () => {
         console.log(bidData);
 
         try {
-            const { data } = await axios.post(`${import.meta.env.VITE_APP_URL}/bids`, bidData);
+            const { data } = await axiosSecure.post(`/bids`, bidData);
             toast.success('Bid Request Successful')
             console.log(data);
         } catch (error) {
-            console.error(error);
+            console.error(error.response.data);
+            toast.error(error.response.data);
+            e.target.reset();
         }
 
     }
@@ -118,6 +124,7 @@ const JobDetails = () => {
                                 id='price'
                                 type='text'
                                 name='price'
+                                required
                                 className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md   focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40  focus:outline-none focus:ring'
                             />
                         </div>
