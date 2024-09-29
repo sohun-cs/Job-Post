@@ -1,39 +1,56 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const MyPostedJob = () => {
 
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
-    const [jobs, setJobs] = useState([]);
+    const queryClient = useQueryClient();
+    const { data: jobs = [], isLoading, refetch, isError, error } = useQuery({
+        queryFn: () => getData(),
+        queryKey: ['jobs', user?.email]
+    })
 
-    useEffect(() => {
+    // const [jobs, setJobs] = useState([]);
 
-        getData();
+    // useEffect(() => {
 
-    }, [user]);
+    //     getData();
+
+    // }, [user]);
 
     const getData = async () => {
-
         const { data } = await axiosSecure(`/jobs/${user?.email}`);
-        setJobs(data);
+        return data
     }
 
-    console.log(jobs);
-    console.log(user);
+    // console.log(jobs);
+    // console.log(user);
 
-    const handleDelete = async id => {
-        try {
-            const { data } = await axiosSecure.delete(`/job/${id}`);
+    const { mutateAsync } = useMutation({
+        mutationFn: async ({ id, status }) => {
+            const { data } = await axiosSecure.delete(`/job/${id}`, { status });
             console.log(data);
+        },
+
+        onSuccess: () => {
+            toast.success('Posted');
+            queryClient.invalidateQueries({ queryKey: ['jobs'] })
+        }
+    })
+
+    const handleDelete = async (id, status) => {
+        try {
+
+            await mutateAsync({ id, status });
             toast.success("Delete Successful");
 
             // Refresh UI
-            getData();
+            // getData();
         } catch (error) {
             console.log(error.message);
             console.error(error.message);

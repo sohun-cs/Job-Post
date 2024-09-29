@@ -1,31 +1,73 @@
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../provider/AuthProvider";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import useAuth from "../../hooks/useAuth";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const BidRequest = () => {
 
-    const { user } = useContext(AuthContext);
-    const [bids, setBids] = useState([]);
+    const { user } = useAuth();
+    const axiosSecure = useAxiosSecure();
+    const queryClient = useQueryClient();
 
-    useEffect(() => {
-        getData();
-    }, [user])
+    const {
+        data: bids = [],
+        isLoading,
+        refetch,
+        isError,
+        error } = useQuery(
+            {
+                queryFn: () => getData(),
+                queryKey: ['bids', user?.email]
+            }
+        )
+
+    console.log(bids);
+
+
+    // const [bids, setBids] = useState([]);
+
+    // useEffect(() => {
+    //     getData();
+    // }, [user])
 
     const getData = async () => {
-        const { data } = await axios(`${import.meta.env.VITE_APP_URL}/bid-requests/${user?.email}`);
-        setBids(data);
+        const { data } = await axiosSecure(`/bid-requests/${user?.email}`);
+        return data;
     };
+
+
+
+    const { mutateAsync } = useMutation({
+        mutationFn: async ({ id, status }) => {
+            const { data } = await axiosSecure.patch(`/bid/${id}`, { status });
+            console.log(data);
+        },
+
+        onSuccess: () => {
+            console.log('Wow data updated');
+            toast.success('Updated');
+
+            // easy
+            // refetch();
+
+            // hard
+            queryClient.invalidateQueries({ queryKey: ['bids'] })
+        }
+
+    })
 
     // handleStatus
     const handleStatus = async (id, prevStatus, status) => {
-        if(prevStatus === status) return toast.error("Already in progress")
+        if (prevStatus === status) return toast.error("Already in progress")
         console.log(id, prevStatus, status);
-        const { data } = await axios.patch(`${import.meta.env.VITE_APP_URL}/bid/${id}`, { status });
 
-        console.log(data);
-        getData();
+        await mutateAsync({ id, status })
+
     }
+
+    // if(isLoading) return <p>Data is loading...</p>
+
 
     return (
         <section className='container px-4 mx-auto pt-12'>
