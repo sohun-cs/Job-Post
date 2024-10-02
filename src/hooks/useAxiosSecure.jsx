@@ -17,11 +17,9 @@ const useAxiosSecure = () => {
     // Response Interceptor
     axiosSecure.interceptors.response.use(
         res => {
-            console.log('Response app e asar agei ami thamiye dekhechi ki ache vitore.');
             return res
         },
         async error => {
-            console.log("Error from axios interceptor", error.response);
             if (error.response.status === 401 || error.response.status === 403) {
                 await logOut();
                 navigate('/login')
