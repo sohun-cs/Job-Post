@@ -28,13 +28,9 @@ const MyPostedJob = () => {
         return data
     }
 
-    // console.log(jobs);
-    // console.log(user);
-
     const { mutateAsync } = useMutation({
         mutationFn: async ({ id, status }) => {
             const { data } = await axiosSecure.delete(`/job/${id}`, { status });
-            console.log(data);
         },
 
         onSuccess: () => {
@@ -52,7 +48,6 @@ const MyPostedJob = () => {
             // Refresh UI
             // getData();
         } catch (error) {
-            console.log(error.message);
             console.error(error.message);
         }
     }

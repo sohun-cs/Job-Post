@@ -41,7 +41,6 @@ const AddJob = () => {
 
         try {
             const { data } = await axiosSecure.post(`/jobs`, jobData);
-            console.log(data);
             toast.success('Job Data Added Successfully');
             navigate('/my-posted-jobs')
         } catch (error) {

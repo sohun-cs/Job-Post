@@ -27,17 +27,13 @@ const Login = () => {
         const email = form.email.value;
         const password = form.password.value;
 
-        console.log(email, password);
-
         try {
 
             const result = await signIn(email, password)
-            console.log(result.user);
             const { data } = await axios.post(`${import.meta.env.VITE_APP_URL}/jwt`,
                 { email: result?.user?.email },
                 { withCredentials: true }); // without this line cookie will not save in browser
 
-            console.log(data);
             navigate(from, { replace: true });
             toast.success("Signup successfully!");
 
@@ -53,19 +49,15 @@ const Login = () => {
 
         try {
             const result = await googleSignIn();
-            console.log(result.user);
-
             
             const { data } = await axios.post(`${import.meta.env.VITE_APP_URL}/jwt`,
                 { email: result?.user?.email },
                 { withCredentials: true }); // without this line cookie will not save in browser
 
-            console.log(data);
             toast.success("Signup successfully!");
             navigate(from, { replace: true });
 
         } catch (error) {
-            console.error(error);
             toast.error(error?.message);
         }
 

@@ -29,15 +29,12 @@ const AllPages = () => {
         getCount();
     }, [filter, search]);
 
-    console.log(jobs);
-
     const numberOfPages = Math.ceil(count / itemsPerPage);
     const pages = [...Array(numberOfPages).keys()].map(element => element + 1);
 
 
     // handle pagination button
     const handlePaginationButton = value => {
-        console.log(value);
         setCurrentPage(value);
     };
 
@@ -54,7 +51,6 @@ const AllPages = () => {
         e.preventDefault();
 
         setSearch(searchText);
-        console.log(search);
     }
 
 

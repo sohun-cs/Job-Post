@@ -22,8 +22,6 @@ const BidRequest = () => {
             }
         )
 
-    console.log(bids);
-
 
     // const [bids, setBids] = useState([]);
 
@@ -41,11 +39,9 @@ const BidRequest = () => {
     const { mutateAsync } = useMutation({
         mutationFn: async ({ id, status }) => {
             const { data } = await axiosSecure.patch(`/bid/${id}`, { status });
-            console.log(data);
         },
 
         onSuccess: () => {
-            console.log('Wow data updated');
             toast.success('Updated');
 
             // easy
@@ -59,10 +55,8 @@ const BidRequest = () => {
 
     // handleStatus
     const handleStatus = async (id, prevStatus, status) => {
-        if (prevStatus === status) return toast.error("Already in progress")
-        console.log(id, prevStatus, status);
-
-        await mutateAsync({ id, status })
+        if (prevStatus === status) return toast.error("Already in progress");
+        await mutateAsync({ id, status });
 
     }
 

@@ -20,10 +20,6 @@ const JobDetails = () => {
 
     const { _id, job_title, deadline, description, category, min_price, max_price, buyer } = job || {};
 
-    console.log("jobs:-- ", job);
-    console.log("User:-- ", user);
-
-    console.log("user?.email", user?.email, "buyer?.email", buyer?.email);
 
     const handleFormSubmission = async e => {
         e.preventDefault();
@@ -53,12 +49,10 @@ const JobDetails = () => {
             buyer_email: buyer?.email
         }
 
-        console.log(bidData);
 
         try {
             const { data } = await axiosSecure.post(`/bids`, bidData);
             toast.success('Bid Request Successful')
-            console.log(data);
         } catch (error) {
             console.error(error.response.data);
             toast.error(error.response.data);

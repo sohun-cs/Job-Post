@@ -26,8 +26,6 @@ const Register = () => {
         const email = form.email.value;
         const password = form.password.value;
 
-        console.log(name, photo, email);
-
         try {
 
             const result = await createUser(email, password);
@@ -36,18 +34,15 @@ const Register = () => {
             // Optimistic UI Update
             setUser({ ...result?.user, photoURL: photo, displayName: name, email: email });
 
-            console.log(result.user);
             const { data } = await axios.post(`${import.meta.env.VITE_APP_URL}/jwt`,
                 { email: result?.user?.email },
                 { withCredentials: true }); // without this line cookie will not save in browser
 
-            console.log(data);
 
             navigate(from, { replace: true });
             toast.success("Signup successfully!");
 
         } catch (error) {
-            console.error(error);
             toast.error(error?.message);
         }
 
@@ -58,12 +53,10 @@ const Register = () => {
         try {
 
             const result = await googleSignIn();
-            console.log(result.user);
             const { data } = await axios.post(`${import.meta.env.VITE_APP_URL}/jwt`,
                 { email: result?.user?.email },
                 { withCredentials: true }); // without this line cookie will not save in browser
 
-            console.log(data);
             toast.success("Signup successfully!");
             navigate(from, { replace: true });
 

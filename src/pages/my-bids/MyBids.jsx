@@ -29,7 +29,6 @@ const MyBids = () => {
     const { mutateAsync } = useMutation({
         mutationFn: async ({ id, status }) => {
             const { data } = await axiosSecure.patch(`/bid/${id}`, { status });
-            console.log(data);
         },
 
         onSuccess: () => {
@@ -41,7 +40,6 @@ const MyBids = () => {
 
     // handleStatus
     const handleStatus = async (id, status) => {
-        console.log(data);
         await mutateAsync({ id, status })
     }
 
