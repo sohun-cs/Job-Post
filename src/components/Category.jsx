@@ -15,7 +15,7 @@ export const Category = () => {
             setJobs(data);
         }
         getData();
-    });
+    }, []);
 
     return (
         <div className='my-24'>
