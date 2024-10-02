@@ -7,23 +7,27 @@ const AllPages = () => {
     const [itemsPerPage, setItemsPerPage] = useState(8);
     const [currentPage, setCurrentPage] = useState(1);
     const [count, setCount] = useState(0);
+    const [filter, setFilter] = useState('');
+    const [sort, setSort] = useState('');
+    const [search, setSearch] = useState('');
+    const [searchText, setSearchText] = useState('');
     const [jobs, setJobs] = useState([]);
 
     useEffect(() => {
         const getData = async () => {
-            const { data } = await axios(`${import.meta.env.VITE_APP_URL}/all-jobs?page=${currentPage}&size=${itemsPerPage}`);
+            const { data } = await axios(`${import.meta.env.VITE_APP_URL}/all-jobs?page=${currentPage}&size=${itemsPerPage}&filter=${filter}&sort=${sort}&search=${search}`);
             setJobs(data);
         }
         getData();
-    }, [currentPage, itemsPerPage]);
+    }, [currentPage, itemsPerPage, filter, sort, search]);
 
     useEffect(() => {
         const getCount = async () => {
-            const { data } = await axios(`${import.meta.env.VITE_APP_URL}/jobs-count`);
+            const { data } = await axios(`${import.meta.env.VITE_APP_URL}/jobs-count?filter=${filter}&search=${search}`);
             setCount(data.count)
         }
         getCount();
-    }, []);
+    }, [filter, search]);
 
     console.log(jobs);
 
@@ -35,7 +39,25 @@ const AllPages = () => {
     const handlePaginationButton = value => {
         console.log(value);
         setCurrentPage(value);
+    };
+
+
+    const handleReset = () => {
+        setFilter('');
+        setSort('');
+        setSearch('');
+        setSearchText('');
+        setCurrentPage(1);
+    };
+
+    const handleSearch = e => {
+        e.preventDefault();
+
+        setSearch(searchText);
+        console.log(search);
     }
+
+
 
 
     return (
@@ -44,22 +66,29 @@ const AllPages = () => {
                 <div className='flex flex-col md:flex-row justify-center items-center gap-5 '>
                     <div>
                         <select
+                            onChange={e => {
+                                setFilter(e.target.value)
+                                setCurrentPage(1)
+                            }}
+                            value={filter}
                             name='category'
                             id='category'
                             className='border p-4 rounded-lg'
                         >
                             <option value=''>Filter By Category</option>
                             <option value='Web Development'>Web Development</option>
-                            <option value='Graphics Design'>Graphics Design</option>
-                            <option value='Digital Marketing'>Digital Marketing</option>
+                            <option value='App Development'>App Development</option>
+                            <option value='Machine Learning'>Machine Learning</option>
                         </select>
                     </div>
 
-                    <form>
+                    <form onSubmit={handleSearch} onChange={e => setCurrentPage(1)}>
                         <div className='flex p-1 overflow-hidden border rounded-lg    focus-within:ring focus-within:ring-opacity-40 focus-within:border-blue-400 focus-within:ring-blue-300'>
                             <input
                                 className='px-6 py-2 text-gray-700 placeholder-gray-500 bg-white outline-none focus:placeholder-transparent'
                                 type='text'
+                                onChange={e => setSearchText(e.target.value)}
+                                value={searchText}
                                 name='search'
                                 placeholder='Enter Job Title'
                                 aria-label='Enter Job Title'
@@ -72,8 +101,13 @@ const AllPages = () => {
                     </form>
                     <div>
                         <select
-                            name='category'
-                            id='category'
+                            onChange={e => {
+                                setSort(e.target.value)
+                                setCurrentPage(1)
+                            }}
+                            value={sort}
+                            name='sort'
+                            id='sort'
                             className='border p-4 rounded-md'
                         >
                             <option value=''>Sort By Deadline</option>
@@ -81,7 +115,7 @@ const AllPages = () => {
                             <option value='asc'>Ascending Order</option>
                         </select>
                     </div>
-                    <button className='btn'>Reset</button>
+                    <button onClick={handleReset} className='btn'>Reset</button>
                 </div>
                 <div className='grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
                     {jobs.map(job => (
